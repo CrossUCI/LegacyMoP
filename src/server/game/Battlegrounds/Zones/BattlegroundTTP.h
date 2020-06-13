@@ -64,6 +64,6 @@ class BattlegroundTTP : public Battleground
         void Reset() OVERRIDE;
         void FillInitialWorldStates(WorldStateBuilder& builder) OVERRIDE;
         void HandleKillPlayer(Player* player, Player* killer) OVERRIDE;
-        bool HandlePlayerUnderMap(Player* player);
+        bool HandlePlayerUnderMap(Player* player) OVERRIDE;
 };
 #endif
