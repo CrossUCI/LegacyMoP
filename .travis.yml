@@ -43,14 +43,7 @@ group: stable
 git:
   depth: 1
 
-branches:
-  only:
-    - master
-
 before_install:
-  - sudo rm -rf /var/lib/dpkg/lock
-  - sudo wget https://dev.mysql.com/get/mysql-apt-config_0.8.14-1_all.deb
-  - sudo dpkg -i mysql-apt-config_0.8.14-1_all.deb
   - sudo apt update
   - sudo apt-get update
   - sudo apt-get install libncurses5-dev libace-dev
@@ -70,10 +63,4 @@ before_script:
 
 script:
   - make -j2
-
-notifications:
-  irc:
-    channels:
-      - "irc.rizon.net#project_skyfire"
-    on_success: always
-    on_failure: always
+ 
