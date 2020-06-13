@@ -44,6 +44,9 @@ git:
   depth: 1
 
 before_install:
+  - sudo rm -rf /var/lib/dpkg/lock
+  - sudo wget https://dev.mysql.com/get/mysql-apt-config_0.8.14-1_all.deb
+  - sudo dpkg -i mysql-apt-config_0.8.14-1_all.deb
   - sudo apt update
   - sudo apt-get update
   - sudo apt-get install libncurses5-dev libace-dev

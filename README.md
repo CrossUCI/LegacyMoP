@@ -42,7 +42,8 @@ For further information on the SkyFire project, please visit our project website
     + Windows 2012 Server R2:   x86_64
 + Processor with SSE2 support
 + ACE = 6.4.5  (Linux only)
-+ MySQL = 5.6.36 (Windows / Linux)
++ MySQL = 8.x.x (Windows / Linux)
++ MariaDB =  10.4 (Windows / Linux)
 + CMake = 3.17.0/3.10.2 (Windows / Linux)
 + OpenSSL = 1.1.1 (Windows / Linux)
 + GCC = 9.2.1 (Linux only)
