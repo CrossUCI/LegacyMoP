@@ -2101,14 +2101,41 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
                     break;
                 case SUMMON_TYPE_LIGHTWELL:
                 case SUMMON_TYPE_TOTEM:
+                case SUMMON_TYPE_BANNER:
                 {
                     summon = m_caster->GetMap()->SummonCreature(entry, *destTarget, properties, duration, m_originalCaster, m_spellInfo->Id);
                     if (!summon || !summon->IsTotem())
                         return;
 
-                    // Mana Tide Totem
-                    if (m_spellInfo->Id == 16190)
-                        damage = m_caster->CountPctFromMaxHealth(10);
+                    switch (m_spellInfo->Id)
+                    {
+                        case 114192: // Mocking Banner
+                        case 114203: // Demoralizing Banner
+                        case 114207: // Skull Banner
+                        {
+                            uint32 perc = 30;
+
+                            damage = m_caster->CountPctFromMaxHealth(perc);
+                            break;
+                        }
+                        case 16190:  // Mana Tide Totem
+                        case 108280: // Healing Tide Totem
+                        case 108270: // Stone Bulwark Totem
+                        {
+                            uint32 perc = 10;
+                            if(m_caster->HasAura(63298))
+                                perc = 15;
+ 
+                            damage = m_caster->CountPctFromMaxHealth(perc);
+                            break;
+                        }
+                        default:
+                        {
+                            if(m_caster->HasAura(63298))
+                                damage += m_caster->CountPctFromMaxHealth(5);
+                            break;
+                        }
+                    }
 
                     if (damage)                                            // if not spell info, DB values used
                     {
