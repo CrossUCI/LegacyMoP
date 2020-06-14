@@ -636,6 +636,8 @@ void AddSC_kezan();
 void AddSC_event_childrens_week();
 
 // Pandaria
+///World Boss
+void AddSC_boss_oondasta();
 
 // Pets
 void AddSC_deathknight_pet_scripts();
@@ -669,10 +671,10 @@ void AddScripts()
     AddEasternKingdomsScripts();
     AddKalimdorScripts();
     AddOutlandScripts();
+    AddPandariaScripts();
     AddNorthrendScripts();
     AddMaelstromScripts();
     AddEventScripts();
-    //AddPandariaScripts();
     AddPetScripts();
     AddBattlegroundScripts();
     AddOutdoorPvPScripts();
@@ -1313,6 +1315,12 @@ void AddNorthrendScripts()
 #endif
 }
 
+void AddPandariaScripts()
+{
+#ifdef SCRIPTS
+    AddSC_boss_oondasta();
+#endif
+}
 
 void AddMaelstromScripts()
 {
