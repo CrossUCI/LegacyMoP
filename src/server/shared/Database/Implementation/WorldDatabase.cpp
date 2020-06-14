@@ -95,4 +95,8 @@ void WorldDatabaseConnection::DoPrepareStatements()
     PrepareStatement(WORLD_SEL_REQ_XP, "SELECT xp_for_next_level FROM player_xp_for_level WHERE lvl = ?", CONNECTION_SYNCH);
     // blackmarket
     PrepareStatement(WORLD_SEL_BLACKMARKET_TEMPLATE, "SELECT Id, MarketID, SellerID, ItemEntry, Quantity, MinBid, Duration, Chance FROM blackmarket_template", CONNECTION_SYNCH);
+
+    PrepareStatement(WORLD_UPD_CREATURE_ZONE_AREA_DATA, "UPDATE creature SET zoneId = ?, areaId = ? WHERE guid = ?", CONNECTION_ASYNC);
+    PrepareStatement(WORLD_UPD_GAMEOBJECT_ZONE_AREA_DATA, "UPDATE gameobject SET zoneId = ?, areaId = ? WHERE guid = ?", CONNECTION_ASYNC);
 }
+

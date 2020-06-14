@@ -1359,6 +1359,9 @@ void World::LoadConfigSettings(bool reload)
 
     setIntConfig(WorldIntConfigs::CONFIG_PACKET_SPOOF_BANDURATION, sConfigMgr->GetIntDefault("PacketSpoof.BanDuration", 86400));
 
+    SetBoolConfig(WorldBoolConfigs::CONFIG_CALCULATE_CREATURE_ZONE_AREA_DATA, sConfigMgr->GetBoolDefault("Calculate.Creature.Zone.Area.Data", false));
+    SetBoolConfig(WorldBoolConfigs::CONFIG_CALCULATE_GAMEOBJECT_ZONE_AREA_DATA, sConfigMgr->GetBoolDefault("Calculate.Gameoject.Zone.Area.Data", false));
+
     // call ScriptMgr if we're reloading the configuration
     if (reload)
         sScriptMgr->OnConfigLoad(reload);
