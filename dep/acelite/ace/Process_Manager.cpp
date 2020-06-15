@@ -129,14 +129,14 @@ ACE_Process_Manager::instance (void)
           ACE_Object_Manager::at_exit (ACE_Process_Manager::instance_,
                                        ACE_Process_Manager_cleanup,
                                        0,
-                                       //typeid (*ACE_Process_Manager::instance_).name ());
-                                       typeid (ACE_Process_Manager).name ()); //VS2019 work around
+                                       typeid (*ACE_Process_Manager::instance_).name ());
+                                       //typeid (ACE_Process_Manager).name ()); //VS2019 fix 16.6
 #else
           ACE_Object_Manager::at_exit (ACE_Process_Manager::instance_,
                                        ACE_Process_Manager::cleanup,
                                        0,
-                                       //typeid (*ACE_Process_Manager::instance_).name ());
-                                       typeid (ACE_Process_Manager).name ()); //VS2019 work around
+                                       typeid (*ACE_Process_Manager::instance_).name ());
+                                       //typeid (ACE_Process_Manager).name ()); //VS2019 fix 16.6
 #endif /* ACE_HAS_SIG_C_FUNC */
 
         }
@@ -164,14 +164,14 @@ ACE_Process_Manager::instance (ACE_Process_Manager *tm)
   ACE_Object_Manager::at_exit (ACE_Process_Manager::instance_,
                                 ACE_Process_Manager_cleanup,
                                 0,
-                                //typeid (*ACE_Process_Manager::instance_).name ());
-                                typeid (ACE_Process_Manager).name ()); //VS2019 work around
+                                typeid (*ACE_Process_Manager::instance_).name ());
+                                //typeid (ACE_Process_Manager).name ()); //VS2019 fix 16.6
 #else
   ACE_Object_Manager::at_exit (ACE_Process_Manager::instance_,
                                 ACE_Process_Manager::cleanup,
                                 0,
-                                //typeid (*ACE_Process_Manager::instance_).name ());
-                                typeid (ACE_Process_Manager).name ()); //VS2019 work around
+                                typeid (*ACE_Process_Manager::instance_).name ());
+                                //typeid (ACE_Process_Manager).name ()); //VS2019 fix 16.6
 #endif /* ACE_HAS_SIG_C_FUNC */
 
   ACE_Process_Manager::instance_ = tm;
