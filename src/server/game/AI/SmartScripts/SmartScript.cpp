@@ -1023,16 +1023,8 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         }
         case SMART_ACTION_SET_INGAME_PHASE_MASK:
         {
-            //break;
-            ObjectList* targets = GetTargets(e, unit);
-
-            if (!targets)
-                break;
-
-            for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
-                (*itr)->ToUnit()->SetPhased(e.action.ingamePhaseId.id, true, e.action.ingamePhaseId.apply);
-
-            delete targets;
+            if (GetBaseObject())
+                GetBaseObject()->SetPhaseMask(e.action.ingamePhaseMask.mask, true);
             break;
         }
         case SMART_ACTION_MOUNT_TO_ENTRY_OR_MODEL:

@@ -710,9 +710,8 @@ struct SmartAction
 
         struct
         {
-            uint32 id;
-            uint32 apply;
-        } ingamePhaseId;
+            uint32 mask;
+        } ingamePhaseMask;
 
         struct
         {

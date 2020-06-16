@@ -90,7 +90,6 @@ DigsitePOIPolygon const* GetDigsitePOIPolygon(uint32 digsiteId);
 
 uint32 GetPowerIndexByClass(uint32 powerType, uint32 classId);
 LFGDungeonEntry const* GetLFGDungeon(uint32 mapId, DifficultyID difficulty);
-std::set<uint32> const& GetPhasesForGroup(uint32 group);
 
 extern DBCStorage <AchievementEntry>             sAchievementStore;
 extern DBCStorage <AchievementCriteriaEntry>     sAchievementCriteriaStore;
@@ -184,7 +183,6 @@ extern DBCStorage <MountCapabilityEntry>         sMountCapabilityStore;
 extern DBCStorage <MountTypeEntry>               sMountTypeStore;
 extern DBCStorage <NameGenEntry>                 sNameGenStore;
 extern DBCStorage <PhaseEntry>                   sPhaseStore;
-extern DBCStorage <PhaseGroupEntry>              sPhaseGroupStore;
 //extern DBCStorage <MapDifficultyEntry>           sMapDifficultyStore; -- use GetMapDifficultyData insteed
 extern MapDifficultyMap                          sMapDifficultyMap;
 extern DBCStorage <MovieEntry>                   sMovieStore;

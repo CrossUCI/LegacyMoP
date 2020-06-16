@@ -3771,7 +3771,7 @@ void Unit::RemoveAurasWithAttribute(uint32 flags)
     }
 }
 
-void Unit::RemoveNotOwnSingleTargetAuras(uint32 newPhase, bool phaseid)
+void Unit::RemoveNotOwnSingleTargetAuras(uint32 newPhase)
 {
     // single target auras from other casters
     for (AuraApplicationMap::iterator iter = m_appliedAuras.begin(); iter != m_appliedAuras.end();)
@@ -3781,12 +3781,12 @@ void Unit::RemoveNotOwnSingleTargetAuras(uint32 newPhase, bool phaseid)
 
         if (aura->GetCasterGUID() != GetGUID() && aura->GetSpellInfo()->IsSingleTarget())
         {
-            if (!newPhase && !phaseid)
+            if (!newPhase)
                 RemoveAura(iter);
             else
             {
                 Unit* caster = aura->GetCaster();
-                if (!caster || (newPhase && !caster->InSamePhase(newPhase)) || (!newPhase && !caster->IsPhased(this)))
+                if (!caster || !caster->InSamePhase(newPhase))
                     RemoveAura(iter);
                 else
                     ++iter;
@@ -11971,7 +11971,6 @@ void Unit::AddToWorld()
     {
         WorldObject::AddToWorld();
     }
-    RebuildTerrainSwaps();
 }
 
 void Unit::RemoveFromWorld()
@@ -13493,9 +13492,6 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
         return false;
     }
 
-    for (auto phase : GetPhases())
-        pet->SetPhased(phase, false, true);
-
     pet->GetCharmInfo()->SetPetNumber(sObjectMgr->GeneratePetNumber(), true);
     // this enables pet details window (Shift+P)
     pet->InitPetCreateSpells();
@@ -14969,62 +14965,6 @@ void Unit::SetPhaseMask(uint32 newPhaseMask, bool update)
         if (m_SummonSlot [i])
             if (Creature* summon = GetMap()->GetCreature(m_SummonSlot [i]))
                 summon->SetPhaseMask(newPhaseMask, true);
-}
-
-void Unit::ClearPhases(bool update)
-{
-    WorldObject::ClearPhases(update);
-}
-
-bool Unit::SetPhased(uint32 id, bool update, bool apply)
-{
-    bool res = WorldObject::SetPhased(id, update, apply);
-
-    if (!IsInWorld())
-        return res;
-
-    if (GetTypeId() == TypeID::TYPEID_UNIT || (!ToPlayer()->IsGameMaster() && !ToPlayer()->GetSession()->PlayerLogout()))
-    {
-        HostileRefManager& refManager = getHostileRefManager();
-        HostileReference* ref = refManager.getFirst();
-
-        while (ref)
-        {
-            if (Unit* unit = ref->GetSource()->GetOwner())
-                if (Creature* creature = unit->ToCreature())
-                    refManager.setOnlineOfflineState(creature, creature->IsPhased(this));
-
-            ref = ref->next();
-        }
-
-        // modify threat lists for new phasemask
-        if (GetTypeId() != TypeID::TYPEID_PLAYER)
-        {
-            std::list<HostileReference*> threatList = getThreatManager().getThreatList();
-            std::list<HostileReference*> offlineThreatList = getThreatManager().getOfflineThreatList();
-
-            // merge expects sorted lists
-            threatList.sort();
-            offlineThreatList.sort();
-            threatList.merge(offlineThreatList);
-
-            for (std::list<HostileReference*>::const_iterator itr = threatList.begin(); itr != threatList.end(); ++itr)
-                if (Unit* unit = (*itr)->getTarget())
-                    unit->getHostileRefManager().setOnlineOfflineState(ToCreature(), unit->IsPhased(this));
-        }
-    }
-
-    for (ControlList::const_iterator itr = m_Controlled.begin(); itr != m_Controlled.end(); ++itr)
-        if ((*itr)->GetTypeId() == TypeID::TYPEID_UNIT)
-            (*itr)->SetPhased(id, true, apply);
-
-    for (uint8 i = 0; i < MAX_SUMMON_SLOT; ++i)
-        if (m_SummonSlot[i])
-            if (Creature* summon = GetMap()->GetCreature(m_SummonSlot[i]))
-                summon->SetPhased(id, true, apply);
-
-    RemoveNotOwnSingleTargetAuras(0, true);
-    return res;
 }
 
 void Unit::UpdateObjectVisibility(bool forced)

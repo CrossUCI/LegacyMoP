@@ -177,7 +177,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
 
     Map* map = owner->GetMap();
     uint32 guid = sObjectMgr->GenerateLowGuid(HIGHGUID_PET);
-    if (!Create(guid, map, /*owner->GetPhaseMask(),*/ petEntry, petId))
+    if (!Create(guid, map, owner->GetPhaseMask(), petEntry, petId))
         return false;
 
     float px, py, pz;
@@ -190,8 +190,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
             GetGUIDLow(), GetEntry(), GetPositionX(), GetPositionY());
         return false;
     }
-    for (auto itr : owner->GetPhases())
-        SetPhased(itr, false, true);
+
     setPetType(petType);
     setFaction(owner->getFaction());
     SetUInt32Value(UNIT_FIELD_CREATED_BY_SPELL, summonSpellId);
@@ -715,7 +714,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
 {
     ASSERT(creature);
 
-    if (!CreateBaseAtTamed(creature->GetCreatureTemplate(), creature->GetMap()/*, creature->GetPhaseMask()*/))
+    if (!CreateBaseAtTamed(creature->GetCreatureTemplate(), creature->GetMap(), creature->GetPhaseMask()))
         return false;
 
     Relocate(creature->GetPositionX(), creature->GetPositionY(), creature->GetPositionZ(), creature->GetOrientation());
@@ -746,7 +745,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
 
 bool Pet::CreateBaseAtCreatureInfo(CreatureTemplate const* cinfo, Unit* owner)
 {
-    if (!CreateBaseAtTamed(cinfo, owner->GetMap()/*, owner->GetPhaseMask()*/))
+    if (!CreateBaseAtTamed(cinfo, owner->GetMap(), owner->GetPhaseMask()))
         return false;
 
     if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->family))
@@ -757,12 +756,12 @@ bool Pet::CreateBaseAtCreatureInfo(CreatureTemplate const* cinfo, Unit* owner)
     return true;
 }
 
-bool Pet::CreateBaseAtTamed(CreatureTemplate const* cinfo, Map* map/*, uint32 phaseMask*/)
+bool Pet::CreateBaseAtTamed(CreatureTemplate const* cinfo, Map* map, uint32 phaseMask)
 {
     SF_LOG_DEBUG("entities.pet", "Pet::CreateBaseForTamed");
     uint32 guid=sObjectMgr->GenerateLowGuid(HIGHGUID_PET);
     uint32 petId = sObjectMgr->GeneratePetNumber();
-    if (!Create(guid, map, /*phaseMask,*/ cinfo->Entry, petId))
+    if (!Create(guid, map, phaseMask, cinfo->Entry, petId))
         return false;
 
     setPowerType(POWER_FOCUS);
@@ -1879,12 +1878,12 @@ bool Pet::IsPermanentPetFor(Player* owner) const
     }
 }
 
-bool Pet::Create(uint32 guidlow, Map* map, /*uint32 phaseMask,*/ uint32 Entry, uint32 petId)
+bool Pet::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, uint32 petId)
 {
     ASSERT(map);
     SetMap(map);
 
-    //SetPhaseMask(phaseMask, false);
+    SetPhaseMask(phaseMask, false);
     Object::_Create(guidlow, petId, HIGHGUID_PET);
 
     m_DBTableGuid = guidlow;

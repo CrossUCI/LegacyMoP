@@ -87,15 +87,12 @@ public:
         {
             GameObject* go = new GameObject;
             if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, instance,
-                pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(),
+                PHASEMASK_NORMAL, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(),
                 0, 0, 0, 0, 120, GOState::GO_STATE_READY))
             {
                 delete go;
                 return;
             }
-
-            for (auto phase : go->GetPhases())
-                go->SetPhased(phase, false, true);
 
             instance->AddToMap(go);
         }

@@ -1225,13 +1225,18 @@ public:
         if (!*args)
             return false;
 
-        uint32 phase = (uint32)atoi((char*)args);
+        uint32 phasemask = (uint32)atoi((char*)args);
 
         Unit* target = handler->getSelectedUnit();
-        if (!target)
-            target = handler->GetSession()->GetPlayer();
-
-        target->SetPhased(phase, true, !target->IsPhased(phase));
+        if (target)
+        {
+            if (target->GetTypeId() == TYPEID_PLAYER)
+                target->ToPlayer()->GetPhaseMgr().SetCustomPhase(phasemask);
+            else
+                target->SetPhaseMask(phasemask, true);
+        }
+        else
+            handler->GetSession()->GetPlayer()->GetPhaseMgr().SetCustomPhase(phasemask);
 
         return true;
     }
