@@ -90,7 +90,6 @@ public:
             { "los",           rbac::RBAC_PERM_COMMAND_DEBUG_LOS,           false, &HandleDebugLoSCommand,              "", },
             { "moveflags",     rbac::RBAC_PERM_COMMAND_DEBUG_MOVEFLAGS,     false, &HandleDebugMoveflagsCommand,        "", },
             { "transport",     rbac::RBAC_PERM_COMMAND_DEBUG_TRANSPORT,     false, &HandleDebugTransportCommand,        "", },
-            { "phase",         rbac::RBAC_PERM_COMMAND_DEBUG_PHASE,         false, &HandleDebugPhaseCommand,            "", },
         };
         static std::vector<ChatCommand> commandTable =
         {
@@ -1206,17 +1205,6 @@ public:
         }
 
         handler->PSendSysMessage("Transport %s %s", transport->GetName().c_str(), start ? "started" : "stopped");
-        return true;
-    }
-
-    static bool HandleDebugPhaseCommand(ChatHandler* handler, char const* /*args*/)
-    {
-        Unit* unit = handler->getSelectedUnit();
-        Player* player = handler->GetSession()->GetPlayer();
-        if (unit && unit->GetTypeId() == TYPEID_PLAYER)
-            player = unit->ToPlayer();
-
-        player->GetPhaseMgr().SendDebugReportToPlayer(handler->GetSession()->GetPlayer());
         return true;
     }
 };
